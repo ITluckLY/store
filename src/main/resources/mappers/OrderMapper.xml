@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.store.mapper.OrderMapper">
+
+	<!-- 查询订单详情得到OrderVO的映射配置 -->
+	<resultMap id="Order_VO_Map" 
+		type="cn.tedu.store.vo.OrderVO">
+		<id column="id" property="id" />
+		<result column="uid" property="uid" />
+		<result column="recv_name" property="recvName" />
+		<result column="recv_phone" property="recvPhone" />
+		<result column="recv_district" property="recvDistrict" />
+		<result column="recv_address" property="recvAddress" />
+		<result column="pay" property="pay" />
+		<result column="status" property="status" />
+		<collection property="items"
+			ofType="cn.tedu.store.entity.OrderItem">
+			<result column="goods_id" property="goodsId" />
+			<result column="goods_image" property="goodsImage" />
+			<result column="goods_title" property="goodsTitle" />
+			<result column="goods_price" property="goodsPrice" />
+			<result column="goods_count" property="goodsCount" />
+		</collection>
+	</resultMap>
+
+	<!-- 插入订单数据 -->
+	<!-- Integer insertOrder(Order order) -->
+	<insert id="insertOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order (
+			uid,
+			recv_name, recv_phone,
+			recv_district, recv_address,
+			pay, order_time, status,
+			created_user, created_time,
+			modified_user, modified_time
+		) VALUES (
+			#{uid},
+			#{recvName}, #{recvPhone},
+			#{recvDistrict}, #{recvAddress},
+			#{pay}, #{orderTime}, #{status},
+			#{createdUser}, #{createdTime},
+			#{modifiedUser}, #{modifiedTime}
+		)
+	</insert>
+
+	<!-- 插入订单商品数据 -->
+	<!-- Integer insertOrderItem(OrderItem orderItem) -->
+	<insert id="insertOrderItem"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order_item (
+			oid,
+			goods_id, 
+			goods_image, goods_title,
+			goods_price, goods_count,
+			created_user, created_time,
+			modified_user, modified_time
+		) VALUES (
+			#{oid},
+			#{goodsId}, 
+			#{goodsImage}, #{goodsTitle},
+			#{goodsPrice}, #{goodsCount},
+			#{createdUser}, #{createdTime},
+			#{modifiedUser}, #{modifiedTime}
+		)
+	</insert>
+	
+	<!-- 根据id查询订单详情 -->
+	<!-- OrderVO findById(Integer id) -->
+	<select id="findById" resultMap="Order_VO_Map">
+		SELECT 
+			t_order.id,
+			uid,
+			recv_name, recv_phone, 
+			recv_district, recv_address,
+			pay, status,
+			goods_id,
+			goods_image, goods_title,
+			goods_price, goods_count
+		FROM 
+			t_order 
+		INNER JOIN
+			t_order_item 
+		ON 
+			t_order.id=t_order_item.oid 
+		WHERE 
+			t_order.id=#{id}
+	</select>
+
+</mapper>
+
+
+
+
+
