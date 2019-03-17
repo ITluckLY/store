@@ -7,10 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @MapperScan("cn.tedu.store.mapper")
 public class TeduStoreApplication {
-/**
- * 加个注释试试
- * @param args
- */
+
 	public static void main(String[] args) {
 		SpringApplication.run(TeduStoreApplication.class, args);
 	}
